@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.mediaplayer.view.TitleBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#ff3097fd"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bg_logo"/>
+
+    <TextView
+        android:id="@+id/tv_search"
+        android:layout_weight="1"
+        android:text="全网搜索"
+        android:gravity="left|center_vertical"
+        android:drawablePadding="5dp"
+        android:clickable="true"
+        android:textColor="@drawable/search_text_color_selector"
+        android:background="@drawable/search_bg_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:drawableLeft="@drawable/search_left"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/iv_game"
+            android:drawableLeft="@drawable/bg_btn_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_alignRight="@id/iv_game"
+            android:background="@drawable/do_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/seq_btn"/>
+</com.example.mediaplayer.view.TitleBar>
