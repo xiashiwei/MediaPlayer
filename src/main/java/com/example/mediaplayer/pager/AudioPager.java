@@ -17,12 +17,13 @@ public class AudioPager extends BasePager {
     @Override
     public View initView() {
         textview=new TextView(context);
-        textview.setText("asd");
+        textview.setText("bibibibbi");
         return textview;
     }
 
     @Override
     public void initData() {
         super.initData();
+        System.out.println("本地音频初始化了。。");
     }
 }

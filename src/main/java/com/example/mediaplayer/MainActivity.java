@@ -19,6 +19,7 @@ import com.example.mediaplayer.pager.AudioPager;
 import com.example.mediaplayer.pager.NetAudioPager;
 import com.example.mediaplayer.pager.NetVideoPager;
 import com.example.mediaplayer.pager.VideoPager;
+import com.example.mediaplayer.MyFragment;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,7 @@ public class MainActivity extends FragmentActivity {
                     position=2;
                     break;
             }
-           // setFragment();
+          setFragment();
 
         }
     }
@@ -83,4 +84,22 @@ public class MainActivity extends FragmentActivity {
 //        });
 //        ft.commit();
 //    }
+
+    private void setFragment() {
+         FragmentManager fm= getSupportFragmentManager();
+         FragmentTransaction ft=fm.beginTransaction();
+         ft.replace(R.id.fl_main,MyFragment.newInstance(this.getBasePager()));
+         ft.commit();
+     }
+    private BasePager getBasePager() {
+        BasePager basePager=basePagers.get(position);
+        if(basePager!=null&&!basePager.is_initData){
+            basePager.is_initData=true;
+            basePager.initData();
+        }
+        return basePager;
+    }
+
+
 }
+
