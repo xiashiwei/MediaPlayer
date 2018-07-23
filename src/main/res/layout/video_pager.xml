@@ -10,8 +10,16 @@
         android:layout_height="match_parent"/>
 
     <TextView
+        android:layout_centerInParent="true"
+        android:id="@+id/tv_nomedia"
         android:text="没有找到视频..."
+        android:textSize="18sp"
         android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
