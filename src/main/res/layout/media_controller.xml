@@ -122,30 +122,36 @@
             android:layout_height="wrap_content">
 
             <Button
+                android:layout_weight="1"
                 android:id="@+id/btn_voice_exit"
                 android:background="@drawable/btn_voice_exit_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:layout_weight="1"
                 android:id="@+id/btn_voice_pre"
                 android:background="@drawable/btn_voice_pre_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:layout_weight="1"
                 android:id="@+id/btn_voice_start_pause"
                 android:background="@drawable/btn_voice_pause_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:layout_weight="1"
                 android:id="@+id/btn_voice_next"
                 android:background="@drawable/btn_voice_next_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Button
+                android:layout_weight="1"
                 android:id="@+id/btn_voice_switch_screen"
-                android:background="@drawable/btn_voice_switch_screen_selector"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_voice_switch_screen_selector" />
 
         </LinearLayout>
     </LinearLayout>

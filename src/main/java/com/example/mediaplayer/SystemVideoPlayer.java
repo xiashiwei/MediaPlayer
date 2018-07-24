@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 //import android.widget.MediaController;
+import android.view.View;
 import android.widget.*;
 
 
-public class SystemVideoPlayer extends Activity {
+public class SystemVideoPlayer extends Activity implements View.OnClickListener {
     private VideoView videoview;
     private Uri uri;
     private LinearLayout llTop;
@@ -55,13 +56,13 @@ public class SystemVideoPlayer extends Activity {
         btnVoiceNext = (Button)findViewById( R.id.btn_voice_next );
         btnVoiceSwitchScreen = (Button)findViewById( R.id.btn_voice_switch_screen );
 
-        btnVoice.setOnClickListener( this );
-        btnSwitchPlayer.setOnClickListener( this );
-        btnVoiceExit.setOnClickListener( this );
-        btnVoicePre.setOnClickListener( this );
-        btnVoiceStartPause.setOnClickListener( this );
-        btnVoiceNext.setOnClickListener( this );
-        btnVoiceSwitchScreen.setOnClickListener( this );
+        btnVoice.setOnClickListener(this);
+        btnSwitchPlayer.setOnClickListener(this);
+        btnVoiceExit.setOnClickListener(this);
+        btnVoicePre.setOnClickListener(this);
+        btnVoiceStartPause.setOnClickListener(this);
+        btnVoiceNext.setOnClickListener(this);
+        btnVoiceSwitchScreen.setOnClickListener(this);
     }
 
     /**
@@ -81,6 +82,13 @@ public class SystemVideoPlayer extends Activity {
         } else if ( v == btnVoicePre ) {
             // Handle clicks for btnVoicePre
         } else if ( v == btnVoiceStartPause ) {
+            if(videoview.isPlaying()){
+                videoview.pause();
+                btnVoiceStartPause.setBackgroundResource(R.drawable.btn_voice_start_selector);
+            }else{
+                videoview.start();
+                btnVoiceStartPause.setBackgroundResource(R.drawable.btn_voice_pause_selector);
+            }
             // Handle clicks for btnVoiceStartPause
         } else if ( v == btnVoiceNext ) {
             // Handle clicks for btnVoiceNext
@@ -95,6 +103,7 @@ public class SystemVideoPlayer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_video_player);
         videoview=findViewById(R.id.videoview);
+        findViews();
         uri=getIntent().getData();
         videoview.setVideoURI(uri);
 
@@ -161,5 +170,10 @@ public class SystemVideoPlayer extends Activity {
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
