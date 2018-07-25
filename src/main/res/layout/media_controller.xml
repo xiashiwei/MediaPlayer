@@ -27,8 +27,7 @@
             <ImageView
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:id="@+id/iv_time"
-                android:src="@drawable/ic_battery_10"
+                android:id="@+id/iv_battery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -98,7 +97,6 @@
                 android:id="@+id/seekbar_video"
                 android:minHeight="6dp"
                 android:maxHeight="6dp"
-                android:progress="20"
                 android:thumb="@drawable/progress_dot_normal"
                 android:layout_weight="1"
                 android:progressDrawable="@drawable/progress_horizontal"

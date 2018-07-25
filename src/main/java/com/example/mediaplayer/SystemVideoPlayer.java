@@ -1,23 +1,32 @@
 package com.example.mediaplayer;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 //import android.widget.MediaController;
 import android.view.View;
 import android.widget.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class SystemVideoPlayer extends Activity implements View.OnClickListener {
+    private static final int PROGRESS=0;
     private VideoView videoview;
     private Uri uri;
     private LinearLayout llTop;
     private TextView tvName;
-    private ImageView ivTime;
+    private ImageView ivBattery;
     private TextView tvTime;
     private Button btnVoice;
     private SeekBar seekbarVoice;
@@ -31,6 +40,31 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Button btnVoiceStartPause;
     private Button btnVoiceNext;
     private Button btnVoiceSwitchScreen;
+    private BatteryReceiver receiver;
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what){
+                case PROGRESS:
+                    int currentPosition=videoview.getCurrentPosition();
+                    seekbarVideo.setProgress(currentPosition);
+
+                    //tvCurrentTime.setText(currentPosition);
+                    tvTime.setText(getSystemTime());
+                    handler.removeMessages(PROGRESS);
+                    handler.sendEmptyMessageDelayed(PROGRESS,1000);
+                    break;
+            }
+        }
+
+    };
+
+    private String getSystemTime() {
+        SimpleDateFormat format=new SimpleDateFormat("HH:mm:ss");
+        return format.format(new Date());
+    }
+
 
     /**
      * Find the Views in the layout<br />
@@ -41,7 +75,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private void findViews() {
         llTop = (LinearLayout)findViewById( R.id.ll_top );
         tvName = (TextView)findViewById( R.id.tv_name );
-        ivTime = (ImageView)findViewById( R.id.iv_time );
+        ivBattery = (ImageView)findViewById( R.id.iv_battery );
         tvTime = (TextView)findViewById( R.id.tv_time );
         btnVoice = (Button)findViewById( R.id.btn_voice );
         seekbarVoice = (SeekBar)findViewById( R.id.seekbar_voice );
@@ -107,9 +141,23 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         uri=getIntent().getData();
         videoview.setVideoURI(uri);
 
+        setListener();
+       // videoview.setMediaController(new MediaController(this));
+
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        receiver=new BatteryReceiver();
+        registerReceiver(receiver,intentFilter);
+    }
+
+    protected void setListener() {
         videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
+                int duration=videoview.getDuration();
+                seekbarVideo.setMax(duration);
+               // tvDuration.setText(duration);
+                handler.sendEmptyMessage(PROGRESS);
                 videoview.start();
             }
         });
@@ -128,9 +176,58 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 finish();
             }
         });
-       // videoview.setMediaController(new MediaController(this));
+        seekbarVideo.setOnSeekBarChangeListener(new VideoOnSeekBarChangeListener());
     }
 
+    class VideoOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener{
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            if(b){
+                videoview.seekTo(i);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
+
+    class BatteryReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level=intent.getIntExtra("level",0);
+            setBattery(level);
+        }
+
+
+    }
+    private void setBattery(int level) {
+        if(level<=0){
+            ivBattery.setImageResource(R.drawable.ic_battery_0);
+        }else if(level<=10){
+            ivBattery.setImageResource(R.drawable.ic_battery_10);
+        }else if(level<=20){
+            ivBattery.setImageResource(R.drawable.ic_battery_20);
+        }else if(level<=40){
+            ivBattery.setImageResource(R.drawable.ic_battery_40);
+        }else if(level<=60){
+            ivBattery.setImageResource(R.drawable.ic_battery_60);
+        }else if(level<=80){
+            ivBattery.setImageResource(R.drawable.ic_battery_80);
+        }else if(level<=100){
+            ivBattery.setImageResource(R.drawable.ic_battery_100);
+        }else{
+            ivBattery.setImageResource(R.drawable.ic_battery_100);
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -158,7 +255,13 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
+
+        if(receiver!=null){
+            unregisterReceiver(receiver);
+            receiver=null;
+        }
         super.onDestroy();
+
     }
 
     @Override
