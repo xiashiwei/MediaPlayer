@@ -16,7 +16,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 
+import com.example.mediaplayer.domain.MediaItem;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -59,6 +62,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
 
     };
+    private  ArrayList<MediaItem> mediaItems;
+    private int position;
 
     private String getSystemTime() {
         SimpleDateFormat format=new SimpleDateFormat("HH:mm:ss");
@@ -138,9 +143,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         setContentView(R.layout.activity_system_video_player);
         videoview=findViewById(R.id.videoview);
         findViews();
-        uri=getIntent().getData();
-        videoview.setVideoURI(uri);
-
+        getData();
+        setData();
         setListener();
        // videoview.setMediaController(new MediaController(this));
 
@@ -150,6 +154,24 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         registerReceiver(receiver,intentFilter);
     }
 
+    private void setData() {
+        if(mediaItems!=null&&mediaItems.size()>0){
+            MediaItem mediaItem=mediaItems.get(position);
+            videoview.setVideoPath(mediaItem.getData());
+            tvName.setText(mediaItem.getName());
+        }else if(uri!=null){
+            videoview.setVideoURI(uri);
+            tvName.setText(uri.toString());
+        }
+
+    }
+
+    protected void getData(){
+        uri=getIntent().getData();
+        mediaItems= (ArrayList<MediaItem>) getIntent().getSerializableExtra("videolist");
+        position =getIntent().getIntExtra("position",0);
+        //
+    }
     protected void setListener() {
         videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
